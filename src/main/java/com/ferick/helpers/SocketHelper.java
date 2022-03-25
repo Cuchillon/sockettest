@@ -46,7 +46,11 @@ public class SocketHelper {
         while (System.currentTimeMillis() - start < DEFAULT_TIMEOUT && !condition.apply(jsonElement)) {
             jsonElement = getEvent();
         }
-        return (System.currentTimeMillis() - start < DEFAULT_TIMEOUT) ? jsonElement : null;
+        if (System.currentTimeMillis() - start < DEFAULT_TIMEOUT) {
+            return jsonElement;
+        } else {
+            throw new AssertionError("Event satisfying the condition not found");
+        }
     }
 
     private JsonElement getEvent() {
