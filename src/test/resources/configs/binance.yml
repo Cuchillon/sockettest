@@ -1,0 +1,5 @@
+---
+binance:
+  baseUrl: 'wss://stream.binance.com:9443'
+  path: '/stream'
+  params: 'streams=ethbtc@depth'
