@@ -44,9 +44,10 @@ public class BinanceTest extends AbstractTest {
     @DisplayName("Checking 'a' and 'b' fields")
     public void checkABFields() {
         var jsonPath = baseMethods().jsonPath();
-        Function<JsonElement, Boolean> condition = (jsonElement) ->
-                jsonPath.getJsonValue(jsonElement, A_FIELD_PATH).isPresent()
-                        && jsonPath.getJsonValue(jsonElement, B_FIELD_PATH).isPresent();
+        Function<JsonElement, Boolean> condition = (jsonElement) -> {
+            var data = jsonElement.getAsJsonObject().get("data").getAsJsonObject();
+            return data.has("a") && data.has("b");
+        };
         var event = context.helpers().socketHelper().getEventByCondition(condition);
         var aValue = new BigDecimal(jsonPath.getStringValue(event, A_FIELD_PATH + FIRST_VALUE_PATH));
         var bValue = new BigDecimal(jsonPath.getStringValue(event, B_FIELD_PATH + FIRST_VALUE_PATH));

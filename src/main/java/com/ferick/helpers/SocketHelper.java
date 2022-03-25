@@ -56,11 +56,15 @@ public class SocketHelper {
     private JsonElement getEvent() {
         JsonElement jsonElement = null;
         try {
-            jsonElement = events.takeFirst();
+            jsonElement = events.pollFirst(DEFAULT_TIMEOUT, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
             context.writeError("Getting event was interrupted");
             Thread.currentThread().interrupt();
         }
-        return jsonElement;
+        if (jsonElement != null) {
+            return jsonElement;
+        } else {
+            throw new AssertionError("No event was found during default timeout");
+        }
     }
 }
